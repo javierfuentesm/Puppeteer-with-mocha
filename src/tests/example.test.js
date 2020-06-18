@@ -12,12 +12,8 @@ describe('Config test', () => {
 		console.log('Working')
 	})
 	step('should load google homepage', async () => {
-		await page.goto('https://google.com')
-	})
-	step('step 2 should fail', async () => {
-		throw new Error()
-	})
-	step('step 3', async () => {
-		console.log('step 3')
+		await page.goto('http://zero.webappsecurity.com/index.html')
+		await page.waitAndClick('#onlineBankingMenu')
+		await page.waitFor(5000)
 	})
 })

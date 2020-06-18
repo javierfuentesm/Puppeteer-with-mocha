@@ -20,12 +20,8 @@ describe('Config test', function () {
 		console.log('Working');
 	});
 	(0, _mochaSteps.step)('should load google homepage', async function () {
-		await page.goto('https://google.com');
-	});
-	(0, _mochaSteps.step)('step 2 should fail', async function () {
-		throw new Error();
-	});
-	(0, _mochaSteps.step)('step 3', async function () {
-		console.log('step 3');
+		await page.goto('http://zero.webappsecurity.com/index.html');
+		await page.waitAndClick('#onlineBankingMenu');
+		await page.waitFor(5000);
 	});
 });
