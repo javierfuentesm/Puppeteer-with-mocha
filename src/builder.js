@@ -1,4 +1,5 @@
 import puppeteer from 'puppeteer'
+
 export default class Builder {
 	static async build(viewport) {
 		const launchOptions = {
@@ -43,8 +44,65 @@ export default class Builder {
 		await this.page.waitForSelector(selector)
 		await this.page.click(selector)
 	}
-	async waitAndType(selector, text) {
+	async waitAndType(selector, text, xpath = false) {
+		try {
+			if (xpath) {
+				await this.page.waitForXPath(selector)
+				const input = await this.page.$x(selector)
+				input.length > 1 &&
+					console.warn('the field you entered returned more than one result')
+				await input[0].type(text)
+			} else {
+				await this.page.waitForSelector(selector)
+				await this.page.type(selector, text)
+			}
+		} catch (error) {
+			throw new Error(`Could type on selector ${selector}`)
+		}
+	}
+	async getText(selector) {
 		await this.page.waitForSelector(selector)
-		await this.page.type(selector, text)
+		return await this.page.$eval(selector, (e) => e.innerHTML)
+	}
+	async getCount(selector) {
+		await this.page.waitForSelector(selector)
+		return await this.page.$$eval(selector, (items) => items.length)
+	}
+	async waitForXpathAndClick(xpath) {
+		await this.page.waitForXPath(xpath)
+		const elements = await this.page.$x(xpath)
+		elements.length > 1 &&
+			console.warn('waitForXpath returned more than one result')
+		await elements[0].click()
+	}
+	async waitForTex(selector, text) {
+		try {
+			await this.page.waitForSelector(selector)
+			await this.page.waitForFunction(
+				(selector, text) =>
+					document.querySelector(selector).innerText.includes(text),
+				{},
+				selector,
+				text
+			)
+		} catch (error) {
+			console.error(error)
+			throw new Error(`Could get the text on selector ${selector}`)
+		}
+	}
+	async shouldNotExist(selector, xpath = false) {
+		try {
+			if (xpath) {
+				await this.page.waitForXPath(selector, { hidden: true, timeout: 3000 })
+			} else {
+				await this.page.waitForSelector(selector, {
+					hidden: true,
+					timeout: 3000,
+				})
+			}
+		} catch (error) {
+			console.error(error)
+			throw new Error(`Selector ${selector} should not be visible but it is`)
+		}
 	}
 }
