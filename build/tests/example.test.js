@@ -39,6 +39,8 @@ describe('Config test', function () {
 	});
 	(0, _mochaSteps.step)('should see other page ', async function () {
 		await page.waitForTex('body', 'Cash');
+		var navBarElements = await page.getCount('.nav-tabs li');
+		(0, _chai.expect)(navBarElements).to.equal(6);
 		await page.waitFor(5000);
 	});
 });

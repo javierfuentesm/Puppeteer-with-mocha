@@ -30,6 +30,8 @@ describe('Config test', () => {
 	})
 	step('should see other page ', async () => {
 		await page.waitForTex('body', 'Cash')
+		const navBarElements = await page.getCount('.nav-tabs li')
+		expect(navBarElements).to.equal(6)
 		await page.waitFor(5000)
 	})
 })
