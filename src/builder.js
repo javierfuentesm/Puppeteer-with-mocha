@@ -90,19 +90,21 @@ export default class Builder {
 			throw new Error(`Could get the text on selector ${selector}`)
 		}
 	}
-	async shouldNotExist(selector, xpath = false) {
-		try {
-			if (xpath) {
-				await this.page.waitForXPath(selector, { hidden: true, timeout: 3000 })
-			} else {
-				await this.page.waitForSelector(selector, {
+	async isElementVisible(selector, xpath = false) {
+		let visible = true
+
+		if (xpath) {
+			await this.page
+				.waitForXPath(selector, { hidden: true, timeout: 3000 })
+				.catch((e) => (visible = false))
+		} else {
+			await this.page
+				.waitForSelector(selector, {
 					hidden: true,
 					timeout: 3000,
 				})
-			}
-		} catch (error) {
-			console.error(error)
-			throw new Error(`Selector ${selector} should not be visible but it is`)
+				.catch((e) => (visible = false))
 		}
+		return visible
 	}
 }
