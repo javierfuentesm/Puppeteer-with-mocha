@@ -95,16 +95,18 @@ export default class Builder {
 
 		if (xpath) {
 			await this.page
-				.waitForXPath(selector, { hidden: true, timeout: 3000 })
+				.waitForXPath(selector, { hidden: false, timeout: 3000 })
 				.catch((e) => (visible = false))
+			return visible
 		} else {
 			await this.page
 				.waitForSelector(selector, {
-					hidden: true,
+					hidden: false,
 					timeout: 3000,
 				})
 				.catch((e) => (visible = false))
+			console.log(visible)
+			return visible
 		}
-		return visible
 	}
 }
