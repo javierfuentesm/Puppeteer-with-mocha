@@ -1,15 +1,12 @@
-import puppeteer from 'puppeteer'
 import { step } from 'mocha-steps'
-
+import Page from '../builder'
 describe('Config test', () => {
-	let browser, page
+	let page
 	before(async () => {
-		browser = await puppeteer.launch({ headless: true })
-		page = await browser.newPage()
-		await page.setDefaultTimeout(7000)
+		page = await Page.build('Desktop')
 	})
 	after(async () => {
-		await browser.close()
+		await page.close()
 	})
 	it('should work', function () {
 		console.log('Working')

@@ -12,8 +12,8 @@ export default class Builder {
 		}
 		const browser = await puppeteer.launch(launchOptions)
 		const page = await browser.newPage()
-		const extendePage = new Builder(page)
 		await page.setDefaultTimeout(10000)
+		const extendedPage = new Builder(page)
 		switch (viewport) {
 			case 'Mobile':
 				const mobileViewPort = puppeteer.devices['iPhone X']
@@ -30,5 +30,13 @@ export default class Builder {
 			default:
 				throw new Error('Supported devices are only Mobile | Tablet | Desktop')
 		}
+
+		return new Proxy(extendedPage, {
+			get: (target, property) =>
+				extendedPage[property] || browser[property] || page[property],
+		})
+	}
+	constructor(page) {
+		this.page = page
 	}
 }

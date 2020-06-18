@@ -1,36 +1,31 @@
-'use strict'
+'use strict';
 
-var _puppeteer = require('puppeteer')
+var _mochaSteps = require('mocha-steps');
 
-var _puppeteer2 = _interopRequireDefault(_puppeteer)
+var _builder = require('../builder');
 
-var _mochaSteps = require('mocha-steps')
+var _builder2 = _interopRequireDefault(_builder);
 
-function _interopRequireDefault(obj) {
-	return obj && obj.__esModule ? obj : { default: obj }
-}
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 describe('Config test', function () {
-	var browser = void 0,
-		page = void 0
+	var page = void 0;
 	before(async function () {
-		browser = await _puppeteer2.default.launch({ headless: true })
-		page = await browser.newPage()
-		await page.setDefaultTimeout(7000)
-	})
+		page = await _builder2.default.build('Desktop');
+	});
 	after(async function () {
-		await browser.close()
-	})
+		await page.close();
+	});
 	it('should work', function () {
-		console.log('Working')
-	})
-	;(0, _mochaSteps.step)('should load google homepage', async function () {
-		await page.goto('https://google.com')
-	})
-	;(0, _mochaSteps.step)('step 2 should fail', async function () {
-		throw new Error()
-	})
-	;(0, _mochaSteps.step)('step 3', async function () {
-		console.log('step 3')
-	})
-})
+		console.log('Working');
+	});
+	(0, _mochaSteps.step)('should load google homepage', async function () {
+		await page.goto('https://google.com');
+	});
+	(0, _mochaSteps.step)('step 2 should fail', async function () {
+		throw new Error();
+	});
+	(0, _mochaSteps.step)('step 3', async function () {
+		console.log('step 3');
+	});
+});
