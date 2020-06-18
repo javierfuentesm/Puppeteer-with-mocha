@@ -1,10 +1,12 @@
 import { step } from 'mocha-steps'
 import { expect } from 'chai'
 import Page from '../builder'
+import LoginPage from '../pages/LoginPage'
 describe('Config test', () => {
-	let page
+	let page, loginPage
 	before(async () => {
 		page = await Page.build('Desktop')
+		loginPage = await new LoginPage(page)
 	})
 	after(async () => {
 		await page.close()
@@ -24,9 +26,10 @@ describe('Config test', () => {
 		expect(signinButton).to.be.false
 	})
 	step('should  login to application ', async () => {
-		await page.waitAndType('#user_login', 'username')
+		/*	await page.waitAndType('#user_login', 'username')
 		await page.waitAndType('#user_password', 'password')
-		await page.waitAndClick('.btn-primary')
+		await page.waitAndClick('.btn-primary')*/
+		await loginPage.login('username', 'password')
 	})
 	step('should see other page ', async () => {
 		await page.waitForTex('body', 'Cash')
